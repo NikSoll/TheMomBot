@@ -1,0 +1,22 @@
+{% extends "create/base_create.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
+
+{% block platform %}tg{% endblock %}
+
+{% block platform_fields %}
+<div class="form-group">
+    <label>Токен бота (от @BotFather):</label>
+    <input type="text" name="bot_token" class="form-control" required 
+           placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
+    <small>Получить: https://t.me/BotFather</small>
+</div>
+
+<div class="form-group">
+    <label>Admin ID (для уведомлений):</label>
+    <input type="text" name="admin_id" class="form-control" placeholder="6496349641">
+    <small>Ваш ID в Telegram: @userinfobot</small>
+</div>
+{% endblock %}

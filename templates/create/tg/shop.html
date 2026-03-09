@@ -1,0 +1,19 @@
+{% extends "create/tg/base.html" %}
+
+{% block bot_type %}shop{% endblock %}
+{% block form_title %}🛍️ Создание магазина{% endblock %}
+
+{% block extra_fields %}
+<div class="form-group">
+    <label>Название магазина:</label>
+    <input type="text" name="shop_name" class="form-control" value="Мой магазин">
+</div>
+
+<div class="form-group">
+    <label>Товары (каждый с новой строки):</label>
+    <textarea name="products" class="form-control" rows="5">Футболка, 990, Хлопок
+Худи, 2490, Оверсайз
+Джинсы, 2990, Прямые</textarea>
+    <small>Формат: Название, Цена, Описание</small>
+</div>
+{% endblock %}

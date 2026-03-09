@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Выберите шаблон</h2>
+<div class="templates-grid">
+    {% for t in templates %}
+    <div class="template-card">
+        <h3>{{ t.name }}</h3>
+        <p>{{ t.desc }}</p>
+        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type=t.code) }}" class="btn">Выбрать</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

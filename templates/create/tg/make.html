@@ -1,0 +1,75 @@
+{% extends "create/tg/base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
+
+{% block bot_type %}make{% endblock %}
+{% block form_title %}💅 Бот записи на услуги{% endblock %}
+
+{% block platform_fields %}
+{{ super() }}
+
+<div class="form-group">
+    <label>Название салона:</label>
+    <input type="text" name="shop_name" class="form-control" value="Салон красоты">
+</div>
+
+<div class="form-group">
+    <label>Адрес:</label>
+    <input type="text" name="address" class="form-control" value="г. Омск, ул. Масленникова, д. 45">
+</div>
+
+<div class="form-group">
+    <label>Телефон:</label>
+    <input type="text" name="phone" class="form-control" value="+7 (905) 190-01-54">
+</div>
+
+<div class="form-group">
+    <label>Мастера:</label>
+    <div id="masters-container">
+        <div class="master-item">
+            <input type="text" name="master_name[]" placeholder="Имя" value="Анна">
+            <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="💅" maxlength="2">
+            <button type="button" class="remove-master">❌</button>
+        </div>
+        <div class="master-item">
+            <input type="text" name="master_name[]" placeholder="Имя" value="Мария">
+            <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="✨" maxlength="2">
+            <button type="button" class="remove-master">❌</button>
+        </div>
+    </div>
+    <button type="button" id="add-master">➕ Добавить мастера</button>
+</div>
+
+<script>
+document.getElementById('add-master')?.addEventListener('click', function() {
+    const container = document.getElementById('masters-container');
+    const newMaster = document.createElement('div');
+    newMaster.className = 'master-item';
+    newMaster.innerHTML = `
+        <input type="text" name="master_name[]" placeholder="Имя" value="Новый мастер">
+        <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="👤" maxlength="2">
+        <button type="button" class="remove-master">❌</button>
+    `;
+    container.appendChild(newMaster);
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-master')) {
+        e.target.parentElement.remove();
+    }
+});
+</script>
+
+<style>
+.master-item {
+    display: flex;
+    gap: 5px;
+    margin: 5px 0;
+}
+.master-item input {
+    flex: 1;
+}
+</style>
+{% endblock %}

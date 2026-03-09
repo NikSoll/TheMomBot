@@ -1,0 +1,57 @@
+.create-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.master-item {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+.master-item input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.remove-master {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.remove-master:hover {
+    background: #c82333;
+}
+
+#add-master {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#add-master:hover {
+    background: #218838;
+}
+
+textarea.form-control {
+    min-height: 100px;
+    font-family: monospace;
+}
+
+small {
+    display: block;
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 5px;
+}

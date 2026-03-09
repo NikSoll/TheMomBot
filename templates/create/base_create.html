@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>{% block form_title %}Создание бота{% endblock %}</h2>
+    
+    <form method="POST" action="{{ url_for('main.create_bot') }}">
+        <input type="hidden" name="platform" value="{% block platform %}{% endblock %}">
+        <input type="hidden" name="bot_type" value="{% block bot_type %}{% endblock %}">
+
+        <div class="form-group">
+            <label>Название бота:</label>
+            <input type="text" name="bot_name" class="form-control" required>
+        </div>
+
+        {% block platform_fields %}{% endblock %}
+
+        <button type="submit" class="btn btn-success">✨ Создать бота</button>
+    </form>
+</div>
+{% endblock %}

@@ -4,21 +4,26 @@
     <title>{% block title %}Конструктор ботов{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav>
-        <a href="/">🏠 Главная</a> |
-        <a href="/create">➕ Создать бота</a> |
-        <a href="/bots">📋 Мои боты</a>
-    </nav>
-    <hr>
+    <div class="container">
+        <nav>
+            <a href="{{ url_for('main.index') }}">🏠 Главная</a>
+            <a href="{{ url_for('main.choose_template') }}">➕ Создать бота</a>
+            <a href="{{ url_for('main.list_bots') }}">📋 Мои боты</a>
+        </nav>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <div class="{{ category }}">{{ message }}</div>
-        {% endfor %}
-    {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
 
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

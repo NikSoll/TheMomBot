@@ -1,207 +1,10 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {% block content %}
-<style>
-    body {
-        font-family: 'Segoe UI', Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background: #f5f5f5;
-    }
-
-    .hero {
-        text-align: center;
-        padding: 40px 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 10px;
-        margin-bottom: 30px;
-    }
-
-    .hero h1 {
-        font-size: 2.5em;
-        margin: 0;
-    }
-
-    .lead {
-        font-size: 1.2em;
-        opacity: 0.9;
-    }
-
-    .pricing-info {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin-bottom: 40px;
-    }
-
-    .pricing-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .pricing-card.server {
-        border-left: 5px solid #28a745;
-    }
-
-    .pricing-card.local {
-        border-left: 5px solid #17a2b8;
-    }
-
-    .price {
-        font-size: 2em;
-        font-weight: bold;
-        margin: 15px 0;
-    }
-
-    .price span {
-        font-size: 0.5em;
-        font-weight: normal;
-        color: #666;
-    }
-
-    .pricing-card ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .pricing-card li {
-        margin: 10px 0;
-    }
-
-    .section-title {
-        text-align: center;
-        margin: 40px 0 20px;
-    }
-
-    .templates-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 20px;
-        margin-bottom: 40px;
-    }
-
-    .template-card {
-        background: white;
-        border-radius: 10px;
-        padding: 25px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
-    }
-
-    .template-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
-
-    .template-icon {
-        font-size: 3em;
-        text-align: center;
-        margin-bottom: 15px;
-    }
-
-    .template-card h3 {
-        text-align: center;
-        margin: 10px 0;
-    }
-
-    .template-desc {
-        color: #666;
-        text-align: center;
-        margin-bottom: 15px;
-    }
-
-    .template-features {
-        margin: 15px 0;
-        padding: 10px 0;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-    }
-
-    .feature {
-        display: block;
-        margin: 5px 0;
-        font-size: 0.9em;
-    }
-
-    .template-price {
-        background: #f8f9fa;
-        padding: 10px;
-        border-radius: 5px;
-        margin: 15px 0;
-    }
-
-    .create-price {
-        color: #28a745;
-        font-weight: bold;
-    }
-
-    .host-price {
-        color: #17a2b8;
-    }
-
-    .btn {
-        display: block;
-        text-align: center;
-        padding: 12px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background 0.3s;
-    }
-
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-
-    .info-section {
-        background: white;
-        border-radius: 10px;
-        padding: 30px;
-        margin-top: 40px;
-    }
-
-    .steps {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-        margin-top: 20px;
-    }
-
-    .step {
-        text-align: center;
-    }
-
-    .step-number {
-        width: 40px;
-        height: 40px;
-        background: #007bff;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 10px;
-        font-weight: bold;
-    }
-
-    @media (max-width: 768px) {
-        .pricing-info {
-            grid-template-columns: 1fr;
-        }
-
-        .steps {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
 <div class="hero">
     <h1>🤖 Конструктор Telegram ботов</h1>
     <p class="lead">Создайте профессионального бота за 5 минут без программирования</p>
@@ -236,7 +39,7 @@
 </div>
 
 <div class="templates-grid">
-    <!-- Запись на услуги -->
+    <!--запись на услуги -->
     <div class="template-card">
         <div class="template-icon">💅</div>
         <h3>Запись на услуги</h3>
@@ -251,10 +54,10 @@
             <div class="create-price">Создание: 1 000 ₽</div>
             <div class="host-price">Хостинг: + 500 ₽/мес</div>
         </div>
-        <a href="/create?type=make" class="btn btn-primary">Выбрать шаблон</a>
+        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type='make') }}" class="btn">Выбрать</a>
     </div>
 
-    <!--Интернет-магазин -->
+    <!--магазин -->
     <div class="template-card">
         <div class="template-icon">🛍️</div>
         <h3>Интернет-магазин</h3>
@@ -269,10 +72,10 @@
             <div class="create-price">Создание: 1 500 ₽</div>
             <div class="host-price">Хостинг: + 700 ₽/мес</div>
         </div>
-        <a href="/create?type=shop" class="btn btn-primary">Выбрать шаблон</a>
+        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type='shop') }}" class="btn">Выбрать</a>
     </div>
 
-    <!--Квиз-бот -->
+    <!--Квиз-->
     <div class="template-card">
         <div class="template-icon">🎯</div>
         <h3>Квиз-бот</h3>
@@ -287,7 +90,7 @@
             <div class="create-price">Создание: 800 ₽</div>
             <div class="host-price">Хостинг: + 400 ₽/мес</div>
         </div>
-        <a href="/create?type=quiz" class="btn btn-primary">Выбрать шаблон</a>
+        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type='quiz') }}" class="btn">Выбрать</a>
     </div>
 
     <!-- Опросник -->
@@ -305,7 +108,7 @@
             <div class="create-price">Создание: 800 ₽</div>
             <div class="host-price">Хостинг: + 400 ₽/мес</div>
         </div>
-        <a href="/create?type=survey" class="btn btn-primary">Выбрать шаблон</a>
+        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type='survey') }}" class="btn">Выбрать</a>
     </div>
 
     <!-- Рассыльщик -->
@@ -323,7 +126,7 @@
             <div class="create-price">Создание: 1 200 ₽</div>
             <div class="host-price">Хостинг: + 600 ₽/мес</div>
         </div>
-        <a href="/create?type=mailer" class="btn btn-primary">Выбрать шаблон</a>
+        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type='mailer') }}" class="btn">Выбрать</a>
     </div>
 </div>
 
