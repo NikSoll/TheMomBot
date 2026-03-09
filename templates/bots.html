@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Мои боты{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    <h1>📋 Мои боты</h1>
+</div>
+
+{% if bots %}
+    <div class="bots-grid">
+        {% for bot in bots %}
+            <div class="bot-card">
+                <h3>
+                    {% if bot.bot_type == 'make' %}💅
+                    {% elif bot.bot_type == 'shop' %}🛍️
+                    {% elif bot.bot_type == 'quiz' %}🎯
+                    {% elif bot.bot_type == 'survey' %}📋
+                    {% elif bot.bot_type == 'mailer' %}📢
+                    {% endif %}
+                    {{ bot.name }}
+                </h3>
+                <div class="bot-info">
+                    <p><strong>Платформа:</strong> {{ bot.platform }}</p>
+                    <p><strong>Тип:</strong> {{ bot.bot_type }}</p>
+                    <p><strong>Токен:</strong> {{ bot.token[:10] }}...</p>
+                    <p><strong>Создан:</strong> {{ bot.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                    <p><strong>Папка:</strong> bots/bot_{{ bot.id }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="info-section">
+        <p style="text-align: center;">У вас пока нет ботов. <a href="{{ url_for('create_bot') }}">Создать первого!</a></p>
+    </div>
+{% endif %}
+{% endblock %}
