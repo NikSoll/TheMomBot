@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    <h1>📱 Выберите платформу</h1>
+</div>
+
+<div class="platform-grid">
+    <a href="{{ url_for('main.choose_template', platform='tg') }}" class="platform-card">
+        <div class="platform-icon">📱</div>
+        <div class="platform-name">Telegram</div>
+        <div class="platform-desc">Боты для Telegram<br>Аудитория: 900M+ пользователей</div>
+    </a>
+    
+    <a href="{{ url_for('main.choose_template', platform='vk') }}" class="platform-card">
+        <div class="platform-icon">🔵</div>
+        <div class="platform-name">ВКонтакте</div>
+        <div class="platform-desc">Боты для VK<br>Аудитория: 70M+ пользователей</div>
+    </a>
+    
+    <a href="{{ url_for('main.choose_template', platform='max') }}" class="platform-card">
+        <div class="platform-icon">💬</div>
+        <div class="platform-name">Max</div>
+        <div class="platform-desc">Боты для Max<br>Популярно в РФ</div>
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/platform.js') }}"></script>
+{% endblock %}

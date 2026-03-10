@@ -1,0 +1,125 @@
+{% extends "create/vk/base.html" %}
+
+{% block bot_type %}mailer{% endblock %}
+{% block form_title %}📢 VK Рассыльщик (полная версия){% endblock %}
+
+{% block extra_fields %}
+<div class="settings-section">
+    <h3>🔧 Основные настройки</h3>
+
+    <div class="form-group">
+        <label>Название рассылки</label>
+        <input type="text" name="mailer_name" class="form-control" value="Новостная рассылка">
+    </div>
+
+    <div class="form-group">
+        <label>Admin ID</label>
+        <input type="text" name="admin_id" class="form-control" value="6496349641">
+        <small>Кому приходят уведомления о новых подписках</small>
+    </div>
+</div>
+
+<div class="settings-section">
+    <h3>📋 Настройки подписки</h3>
+
+    <div class="form-group">
+        <label>Автоподписка при старте</label>
+        <select name="subscribe_on_start" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Требовать подтверждение подписки</label>
+        <select name="require_confirmation" class="form-control">
+            <option value="false">Нет</option>
+            <option value="true">Да</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Двойная подписка (Double Opt-In)</label>
+        <select name="double_optin" class="form-control">
+            <option value="false">Нет</option>
+            <option value="true">Да</option>
+        </select>
+    </div>
+</div>
+
+<div class="settings-section">
+    <h3>👥 Группы подписчиков</h3>
+    <div id="groups-container"></div>
+    <button type="button" class="add-btn" id="add-group">➕ Добавить группу</button>
+    <small>Подписчики могут быть в нескольких группах</small>
+</div>
+
+<div class="settings-section">
+    <h3>⏰ Настройки рассылки</h3>
+
+    <div class="form-group">
+        <label>Задержка между сообщениями (сек)</label>
+        <input type="number" name="delay_seconds" class="form-control" value="0.05" step="0.01">
+        <small>Рекомендуется 0.05-0.1 чтобы не заблокировали</small>
+    </div>
+
+    <div class="form-group">
+        <label>Максимум сообщений в минуту</label>
+        <input type="number" name="rate_limit" class="form-control" value="20">
+        <small>Ограничение VK API</small>
+    </div>
+
+    <div class="form-group">
+        <label>Максимум получателей за одну рассылку</label>
+        <input type="number" name="max_recipients" class="form-control" value="1000">
+    </div>
+</div>
+
+<div class="settings-section">
+    <h3>💬 Сообщения</h3>
+
+    <div class="form-group">
+        <label>Приветственное сообщение</label>
+        <textarea name="welcome_message" class="form-control" rows="3">👋 Добро пожаловать! Вы подписались на наши новости.</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Сообщение при отписке</label>
+        <textarea name="goodbye_message" class="form-control" rows="3">😢 Вы отписались от рассылки. Будем ждать вас снова!</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Сообщение с подтверждением подписки</label>
+        <textarea name="confirm_message" class="form-control" rows="3">✅ Подписка подтверждена! Спасибо.</textarea>
+    </div>
+</div>
+
+<div class="settings-section">
+    <h3>📄 Шаблоны рассылок</h3>
+    <div id="templates-container"></div>
+    <button type="button" class="add-btn" id="add-template">➕ Добавить шаблон</button>
+    <small>Готовые шаблоны для быстрых рассылок</small>
+</div>
+
+
+<template id="group-template">
+    <div class="array-item group-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="group_name[]" placeholder="Название группы" required>
+        <textarea name="group_desc[]" placeholder="Описание группы" rows="2"></textarea>
+    </div>
+</template>
+
+<template id="template-template">
+    <div class="array-item template-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="template_name[]" placeholder="Название шаблона" required>
+        <textarea name="template_text[]" placeholder="Текст рассылки" rows="3" required></textarea>
+        <input type="url" name="template_photo[]" placeholder="Фото (URL)">
+    </div>
+</template>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/vk.js') }}"></script>
+{% endblock %}

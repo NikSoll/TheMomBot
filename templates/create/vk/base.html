@@ -1,22 +1,46 @@
-{% extends "create/base_create.html" %}
+{% extends "base.html" %}
 
-{% block platform %}vk{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
 
-{% block platform_fields %}
-<div class="form-group">
-    <label>Токен сообщества ВК:</label>
-    <input type="text" name="vk_token" class="form-control" required>
-    <small>Управление → Работа с API → Ключи доступа</small>
+{% block content %}
+<div class="create-container">
+    <h2>{% block form_title %}Создание VK бота{% endblock %}</h2>
+
+    <form method="POST" action="{{ url_for('main.create_bot') }}">
+        <input type="hidden" name="platform" value="vk">
+        <input type="hidden" name="bot_type" value="{% block bot_type %}{% endblock %}">
+
+        <div class="form-group">
+            <label>Токен сообщества:</label>
+            <input type="text" name="vk_token" class="form-control" required>
+            <small>Управление → Работа с API → Ключи доступа</small>
+        </div>
+
+        <div class="form-group">
+            <label>ID группы:</label>
+            <input type="text" name="group_id" class="form-control" required>
+            <small>Цифры из адресной строки: vk.com/club123456789</small>
+        </div>
+
+        <div class="form-group">
+            <label>Название бота:</label>
+            <input type="text" name="bot_name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>Admin ID:</label>
+            <input type="text" name="admin_id" class="form-control" value="6496349641">
+        </div>
+
+        {% block extra_fields %}{% endblock %}
+
+        <button type="submit" class="btn btn-success">✨ Создать бота</button>
+    </form>
 </div>
+{% endblock %}
 
-<div class="form-group">
-    <label>ID группы:</label>
-    <input type="text" name="group_id" class="form-control" required>
-    <small>Цифры из адресной строки: vk.com/club123456789</small>
-</div>
-
-<div class="form-group">
-    <label>Admin ID (для уведомлений):</label>
-    <input type="text" name="admin_id" class="form-control">
-</div>
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/create.js') }}"></script>
 {% endblock %}

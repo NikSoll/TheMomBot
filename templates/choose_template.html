@@ -2,17 +2,43 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
 {% endblock %}
 
 {% block content %}
-<h2>Выберите шаблон</h2>
+<a href="{{ url_for('main.choose_platform') }}" class="back-link">← Назад к выбору платформы</a>
+
+<div class="platform-header">
+    <h1>
+        {% if platform == 'tg' %}📱 Telegram
+        {% elif platform == 'vk' %}🔵 ВКонтакте
+        {% elif platform == 'max' %}💬 Max
+        {% endif %}
+    </h1>
+    <p>Выберите тип бота для создания</p>
+</div>
+
 <div class="templates-grid">
     {% for t in templates %}
     <div class="template-card">
+        <div class="template-icon">
+            {% if t.code == 'make' %}💅
+            {% elif t.code == 'shop' %}🛍️
+            {% elif t.code == 'quiz' %}🎯
+            {% elif t.code == 'survey' %}📋
+            {% elif t.code == 'mailer' %}📢
+            {% endif %}
+        </div>
         <h3>{{ t.name }}</h3>
-        <p>{{ t.desc }}</p>
-        <a href="{{ url_for('main.create_bot_form', platform='tg', bot_type=t.code) }}" class="btn">Выбрать</a>
+        <p class="template-desc">{{ t.desc }}</p>
+        <a href="{{ url_for('main.create_bot_form', platform=platform, bot_type=t.code) }}" class="btn btn-primary">
+            Создать
+        </a>
     </div>
     {% endfor %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/platform.js') }}"></script>
 {% endblock %}

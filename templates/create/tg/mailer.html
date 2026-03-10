@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="create-container">
+    <h2>📢 Создание рассыльщика</h2>
+
+    <form method="POST" action="{{ url_for('main.create_bot') }}">
+        <input type="hidden" name="platform" value="tg">
+        <input type="hidden" name="bot_type" value="mailer">
+
+        <!--сновные настройки-->
+        <div class="settings-section">
+            <h3>🔧 Основные настройки</h3>
+
+            <div class="form-group">
+                <label>Токен бота *</label>
+                <input type="text" name="bot_token" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Название рассылки</label>
+                <input type="text" name="mailer_name" class="form-control" value="Новостная рассылка">
+            </div>
+
+            <div class="form-group">
+                <label>Admin ID *</label>
+                <input type="text" name="admin_id" class="form-control" value="6496349641">
+            </div>
+        </div>
+
+        <!--настройки подписки-->
+        <div class="settings-section">
+            <h3>📋 Настройки подписки</h3>
+
+            <div class="form-group">
+                <label>Автоподписка при старте</label>
+                <select name="subscribe_on_start" class="form-control">
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Приветственное сообщение</label>
+                <textarea name="welcome_message" class="form-control">👋 Добро пожаловать! Вы подписались на новости.</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Сообщение при отписке</label>
+                <textarea name="goodbye_message" class="form-control">😢 Жаль, что вы уходите. Возвращайтесь!</textarea>
+            </div>
+        </div>
+
+        <!--группы-->
+        <div class="settings-section">
+            <h3>👥 Группы подписчиков</h3>
+            <div id="groups-container"></div>
+            <button type="button" class="add-btn" id="add-group">➕ Добавить группу</button>
+        </div>
+
+        <!-- настройки рассылки -->
+        <div class="settings-section">
+            <h3>⏰ Настройки рассылки</h3>
+
+            <div class="form-group">
+                <label>Задержка между сообщениями (сек)</label>
+                <input type="number" name="delay_seconds" class="form-control" value="0.05" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>Максимум сообщений в минуту</label>
+                <input type="number" name="rate_limit" class="form-control" value="20">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg">✨ Создать рассыльщика</button>
+    </form>
+</div>
+
+<!--шаблоны -->
+<template id="group-template">
+    <div class="array-item group-item">
+        <button type="button" class="remove-item">❌</button>
+        <div class="form-group">
+            <label>Название группы</label>
+            <input type="text" name="group_name[]" class="form-control" required>
+        </div>
+    </div>
+</template>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/create.js') }}"></script>
+{% endblock %}

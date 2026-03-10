@@ -1,0 +1,162 @@
+{% extends "create/vk/base.html" %}
+
+{% block bot_type %}make{% endblock %}
+{% block form_title %}💅 VK бот записи (полная версия){% endblock %}
+
+{% block extra_fields %}
+<!--эбаот-->
+<div class="settings-section">
+    <h3>🏢 Информация о салоне</h3>
+
+    <div class="form-group">
+        <label>Название салона</label>
+        <input type="text" name="shop_name" class="form-control" value="Салон красоты">
+    </div>
+
+    <div class="form-group">
+        <label>Адрес</label>
+        <input type="text" name="address" class="form-control" value="г. Омск, ул. Масленникова, д. 45">
+    </div>
+
+    <div class="form-group">
+        <label>Телефон</label>
+        <input type="text" name="phone" class="form-control" value="+7 (905) 190-01-54">
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" value="salon@example.com">
+    </div>
+
+    <div class="form-group">
+        <label>Сайт</label>
+        <input type="url" name="website" class="form-control" value="https://example.com">
+    </div>
+
+    <div class="form-group">
+        <label>Часы работы</label>
+        <input type="text" name="working_hours" class="form-control" value="Пн-Пт: 10:00-20:00, Сб-Вс: 11:00-18:00">
+    </div>
+
+    <div class="form-group">
+        <label>Описание</label>
+        <textarea name="description" class="form-control" rows="3">Уютный салон красоты в центре города.</textarea>
+    </div>
+</div>
+
+<!--мастер-->
+<div class="settings-section">
+    <h3>👩‍🎨 Мастера</h3>
+    <div id="masters-container"></div>
+    <button type="button" class="add-btn" id="add-master">➕ Добавить мастера</button>
+</div>
+
+<!--услуги-->
+<div class="settings-section">
+    <h3>💇 Услуги и цены</h3>
+    <div id="services-container"></div>
+    <button type="button" class="add-btn" id="add-service">➕ Добавить услугу</button>
+</div>
+
+<!--расписан-->
+<div class="settings-section">
+    <h3>📅 Расписание</h3>
+
+    <div class="form-group">
+        <label>Дни для записи (вперед)</label>
+        <input type="number" name="booking_days" class="form-control" value="7" min="1" max="30">
+    </div>
+
+    <div class="form-group">
+        <label>Временные слоты</label>
+        <textarea name="available_times" class="form-control" rows="5">10:00&#10;11:00&#10;12:00&#10;13:00&#10;14:00&#10;15:00&#10;16:00&#10;17:00&#10;18:00&#10;19:00</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Перерыв между записями (минут)</label>
+        <input type="number" name="break_minutes" class="form-control" value="0" min="0" max="120">
+    </div>
+
+    <div class="form-group">
+        <label>Выходные дни</label>
+        <select name="weekend_days" class="form-control" multiple size="7">
+            <option value="0">Понедельник</option>
+            <option value="1">Вторник</option>
+            <option value="2">Среда</option>
+            <option value="3">Четверг</option>
+            <option value="4">Пятница</option>
+            <option value="5">Суббота</option>
+            <option value="6">Воскресенье</option>
+        </select>
+    </div>
+</div>
+
+<!--уведом-->
+<div class="settings-section">
+    <h3>📨 Уведомления</h3>
+
+    <div class="form-group">
+        <label>Уведомлять администратора</label>
+        <select name="notify_admin" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Уведомлять клиента</label>
+        <select name="notify_client" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Напоминание за час</label>
+        <select name="reminder_hour" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+</div>
+
+<!--сообщ-->
+<div class="settings-section">
+    <h3>💬 Сообщения</h3>
+
+    <div class="form-group">
+        <label>Приветственное сообщение</label>
+        <textarea name="welcome_message" class="form-control" rows="3">💅 Добро пожаловать в салон красоты!</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Сообщение после записи</label>
+        <textarea name="success_message" class="form-control" rows="3">✅ Запись оформлена!</textarea>
+    </div>
+</div>
+
+<!--шаблоны-->
+<template id="master-template">
+    <div class="array-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="master_name[]" placeholder="Имя" required>
+        <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="👤" maxlength="2">
+        <input type="text" name="master_desc[]" placeholder="Описание">
+        <input type="text" name="master_specialty[]" placeholder="Специализация">
+    </div>
+</template>
+
+<template id="service-template">
+    <div class="array-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="service_name[]" placeholder="Название услуги" required>
+        <input type="text" name="service_price[]" placeholder="Цена">
+        <input type="number" name="service_duration[]" placeholder="Длительность (мин)" value="60">
+        <input type="text" name="service_desc[]" placeholder="Описание">
+    </div>
+</template>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/vk.js') }}"></script>
+{% endblock %}

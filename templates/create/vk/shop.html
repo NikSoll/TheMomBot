@@ -1,0 +1,130 @@
+{% extends "create/vk/base.html" %}
+
+{% block bot_type %}shop{% endblock %}
+{% block form_title %}🛍️ VK Магазин (полная версия){% endblock %}
+
+{% block extra_fields %}
+<!--осн настройки-->
+<div class="settings-section">
+    <h3>🔧 Основные настройки</h3>
+
+    <div class="form-group">
+        <label>Название магазина</label>
+        <input type="text" name="shop_name" class="form-control" value="Мой магазин">
+    </div>
+
+    <div class="two-columns">
+        <div class="form-group">
+            <label>Валюта</label>
+            <select name="currency" class="form-control">
+                <option value="₽">Рубль (₽)</option>
+                <option value="$">Доллар ($)</option>
+                <option value="€">Евро (€)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Доставка</label>
+            <select name="delivery_available" class="form-control">
+                <option value="true">Да</option>
+                <option value="false">Нет</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!--каты-->
+<div class="settings-section">
+    <h3>📁 Категории товаров</h3>
+    <div id="categories-container"></div>
+    <button type="button" class="add-btn" id="add-category">➕ Добавить категорию</button>
+</div>
+
+<!--товары-->
+<div class="settings-section">
+    <h3>📦 Товары</h3>
+    <div id="products-container"></div>
+    <button type="button" class="add-btn" id="add-product">➕ Добавить товар</button>
+</div>
+
+<!--заказ-->
+<div class="settings-section">
+    <h3>📝 Настройки заказа</h3>
+
+    <div class="form-group">
+        <label>Спрашивать имя</label>
+        <select name="ask_name" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Спрашивать телефон</label>
+        <select name="ask_phone" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Спрашивать адрес</label>
+        <select name="ask_address" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Спрашивать комментарий</label>
+        <select name="ask_comment" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+</div>
+
+<!--сообщ-->
+<div class="settings-section">
+    <h3>💬 Сообщения</h3>
+
+    <div class="form-group">
+        <label>Приветствие</label>
+        <textarea name="welcome_msg" class="form-control">🛍 Добро пожаловать в магазин!</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Корзина пуста</label>
+        <textarea name="cart_empty_msg" class="form-control">🛒 Корзина пуста</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Заказ оформлен</label>
+        <textarea name="order_success_msg" class="form-control">✅ Заказ оформлен! Спасибо за покупку.</textarea>
+    </div>
+</div>
+
+<!--шаблоны-->
+<template id="category-template">
+    <div class="array-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="category_name[]" placeholder="Название категории" required>
+        <input type="text" name="category_emoji[]" placeholder="Эмодзи" value="📦" maxlength="2">
+    </div>
+</template>
+
+<template id="product-template">
+    <div class="array-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="product_name[]" placeholder="Название товара" required>
+        <input type="number" name="product_price[]" placeholder="Цена" required>
+        <input type="number" name="product_category[]" placeholder="ID категории" value="1">
+        <textarea name="product_desc[]" placeholder="Описание" rows="2"></textarea>
+        <input type="url" name="product_photo[]" placeholder="Фото URL (опционально)">
+    </div>
+</template>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/vk.js') }}"></script>
+{% endblock %}

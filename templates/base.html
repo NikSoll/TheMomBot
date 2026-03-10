@@ -10,7 +10,7 @@
     <div class="container">
         <nav>
             <a href="{{ url_for('main.index') }}">🏠 Главная</a>
-            <a href="{{ url_for('main.choose_template') }}">➕ Создать бота</a>
+           <a href="{{ url_for('main.choose_platform') }}">➕ Создать бота</a>
             <a href="{{ url_for('main.list_bots') }}">📋 Мои боты</a>
         </nav>
 
@@ -23,7 +23,6 @@
         {% block content %}{% endblock %}
     </div>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

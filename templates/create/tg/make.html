@@ -1,75 +1,286 @@
-{% extends "create/tg/base.html" %}
+{% extends "base.html" %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
 {% endblock %}
 
-{% block bot_type %}make{% endblock %}
-{% block form_title %}💅 Бот записи на услуги{% endblock %}
+{% block content %}
+<div class="create-container">
+    <h2>💅 Создание бота записи</h2>
 
-{% block platform_fields %}
-{{ super() }}
+    <form method="POST" action="{{ url_for('main.create_bot') }}">
+        <input type="hidden" name="platform" value="tg">
+        <input type="hidden" name="bot_type" value="make">
 
-<div class="form-group">
-    <label>Название салона:</label>
-    <input type="text" name="shop_name" class="form-control" value="Салон красоты">
-</div>
+        <!--ОСН НАСТРОЙКИ-->
+        <div class="settings-section">
+            <h3>🔧 Основные настройки</h3>
 
-<div class="form-group">
-    <label>Адрес:</label>
-    <input type="text" name="address" class="form-control" value="г. Омск, ул. Масленникова, д. 45">
-</div>
+            <div class="form-group">
+                <label>Токен бота *</label>
+                <input type="text" name="bot_token" class="form-control" required
+                       placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
+                <div class="help-text">Получите у @BotFather в Telegram</div>
+            </div>
 
-<div class="form-group">
-    <label>Телефон:</label>
-    <input type="text" name="phone" class="form-control" value="+7 (905) 190-01-54">
-</div>
+            <div class="form-group">
+                <label>Название бота *</label>
+                <input type="text" name="bot_name" class="form-control" required
+                       value="Салон красоты бот">
+            </div>
 
-<div class="form-group">
-    <label>Мастера:</label>
-    <div id="masters-container">
-        <div class="master-item">
-            <input type="text" name="master_name[]" placeholder="Имя" value="Анна">
-            <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="💅" maxlength="2">
-            <button type="button" class="remove-master">❌</button>
+            <div class="form-group">
+                <label>Admin ID (для уведомлений) *</label>
+                <input type="text" name="admin_id" class="form-control" required
+                       value="6496349641">
+                <div class="help-text">Ваш ID в Telegram (узнайте у @userinfobot)</div>
+            </div>
         </div>
-        <div class="master-item">
-            <input type="text" name="master_name[]" placeholder="Имя" value="Мария">
-            <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="✨" maxlength="2">
-            <button type="button" class="remove-master">❌</button>
+
+        <!--ИНФО-->
+        <div class="settings-section">
+            <h3>🏢 Информация о салоне</h3>
+
+            <div class="form-group">
+                <label>Название салона</label>
+                <input type="text" name="shop_name" class="form-control" value="Салон красоты">
+            </div>
+
+            <div class="form-group">
+                <label>Адрес</label>
+                <input type="text" name="address" class="form-control"
+                       value="г. Омск, ул. Масленникова, д. 45">
+            </div>
+
+            <div class="form-group">
+                <label>Телефон</label>
+                <input type="text" name="phone" class="form-control"
+                       value="+7 (905) 190-01-54">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control"
+                       value="salon@example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Сайт</label>
+                <input type="url" name="website" class="form-control"
+                       value="https://example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Часы работы</label>
+                <input type="text" name="working_hours" class="form-control"
+                       value="Пн-Пт: 10:00-20:00, Сб-Вс: 11:00-18:00">
+            </div>
+
+            <div class="form-group">
+                <label>Описание салона</label>
+                <textarea name="description" class="form-control" rows="3">Уютный салон красоты в центре города. Профессиональные мастера, качественные материалы.</textarea>
+            </div>
+        </div>
+
+        <!--МАСТЕРА-->
+        <div class="settings-section">
+            <h3>👩‍🎨 Мастера</h3>
+            <div id="masters-container">
+                <!--шаблон сюда -->
+            </div>
+            <button type="button" class="add-btn" id="add-master">➕ Добавить мастера</button>
+            <div class="help-text">Добавьте всех мастеров салона</div>
+        </div>
+
+        <!--УСЛУГИ-->
+        <div class="settings-section">
+            <h3>💇 Услуги и цены</h3>
+            <div id="services-container">
+                <!-- Шаблон для услуги будет добавляться сюда -->
+            </div>
+            <button type="button" class="add-btn" id="add-service">➕ Добавить услугу</button>
+            <div class="help-text">Стоимость услуг (можно оставить пустым, если цена зависит от мастера)</div>
+        </div>
+
+        <!--РАСПИС-->
+        <div class="settings-section">
+            <h3>📅 Расписание</h3>
+
+            <div class="form-group">
+                <label>Дни для записи (вперед)</label>
+                <input type="number" name="booking_days" class="form-control" value="7" min="1" max="30">
+                <div class="help-text">На сколько дней вперед можно записаться</div>
+            </div>
+
+            <div class="form-group">
+                <label>Временные слоты</label>
+                <textarea name="available_times" class="form-control" rows="5">10:00
+11:00
+12:00
+13:00
+14:00
+15:00
+16:00
+17:00
+18:00
+19:00</textarea>
+                <div class="help-text">Каждое время с новой строки</div>
+            </div>
+
+            <div class="form-group">
+                <label>Перерыв между записями (минут)</label>
+                <input type="number" name="break_minutes" class="form-control" value="0" min="0" max="120">
+            </div>
+
+            <div class="form-group">
+                <label>Выходные дни</label>
+                <select name="weekend_days" class="form-control" multiple size="7">
+                    <option value="0">Понедельник</option>
+                    <option value="1">Вторник</option>
+                    <option value="2">Среда</option>
+                    <option value="3">Четверг</option>
+                    <option value="4">Пятница</option>
+                    <option value="5">Суббота</option>
+                    <option value="6">Воскресенье</option>
+                </select>
+                <div class="help-text">Зажмите Ctrl для выбора нескольких</div>
+            </div>
+        </div>
+
+        <!--УВЕДОМЛЕНИЯ-->
+        <div class="settings-section">
+            <h3>📨 Уведомления</h3>
+
+            <div class="form-group">
+                <label>Уведомлять администратора</label>
+                <select name="notify_admin" class="form-control">
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Уведомлять клиента</label>
+                <select name="notify_client" class="form-control">
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Напоминание за час</label>
+                <select name="reminder_hour" class="form-control">
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                </select>
+            </div>
+        </div>
+
+        <!--GOOGLE SHEETS-->
+        <div class="settings-section">
+            <h3>📊 Google Sheets интеграция</h3>
+
+            <div class="form-group">
+                <label>Использовать Google Sheets</label>
+                <select name="use_google_sheets" class="form-control" id="useSheets">
+                    <option value="true">Да</option>
+                    <option value="false" selected>Нет</option>
+                </select>
+            </div>
+
+            <div id="sheets-settings" style="display: none;">
+                <div class="form-group">
+                    <label>Ссылка на Google таблицу</label>
+                    <input type="url" name="sheet_url" class="form-control"
+                           placeholder="https://docs.google.com/spreadsheets/d/...">
+                </div>
+
+                <div class="form-group">
+                    <label>Название листа</label>
+                    <input type="text" name="sheet_name" class="form-control" value="Sheet1">
+                </div>
+            </div>
+        </div>
+
+        <!--доп настройки-->
+        <div class="settings-section">
+            <h3>⚙️ Дополнительно</h3>
+
+            <div class="form-group">
+                <label>Приветственное сообщение</label>
+                <textarea name="welcome_message" class="form-control" rows="3">💅 Добро пожаловать в салон красоты! Я помогу вам записаться на процедуру.</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Сообщение после записи</label>
+                <textarea name="success_message" class="form-control" rows="3">✅ Запись оформлена! Мы свяжемся с вами для подтверждения.</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Требовать комментарий</label>
+                <select name="require_comment" class="form-control">
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Максимум записей в день</label>
+                <input type="number" name="max_bookings_per_day" class="form-control" value="0" min="0">
+                <div class="help-text">0 - без ограничений</div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg" style="width: 100%; padding: 15px;">✨ Создать бота с этими настройками</button>
+    </form>
+</div>
+
+<!--шаблоны для жс-->
+<template id="master-template">
+    <div class="array-item master-item">
+        <button type="button" class="remove-item">❌ Удалить</button>
+        <div class="form-group">
+            <label>Имя мастера</label>
+            <input type="text" name="master_name[]" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Эмодзи</label>
+            <input type="text" name="master_emoji[]" class="form-control" value="👤" maxlength="2">
+        </div>
+        <div class="form-group">
+            <label>Описание</label>
+            <input type="text" name="master_desc[]" class="form-control" placeholder="Мастер маникюра, стаж 5 лет">
+        </div>
+        <div class="form-group">
+            <label>Специализация</label>
+            <input type="text" name="master_specialty[]" class="form-control" placeholder="Маникюр, педикюр">
         </div>
     </div>
-    <button type="button" id="add-master">➕ Добавить мастера</button>
-</div>
+</template>
 
-<script>
-document.getElementById('add-master')?.addEventListener('click', function() {
-    const container = document.getElementById('masters-container');
-    const newMaster = document.createElement('div');
-    newMaster.className = 'master-item';
-    newMaster.innerHTML = `
-        <input type="text" name="master_name[]" placeholder="Имя" value="Новый мастер">
-        <input type="text" name="master_emoji[]" placeholder="Эмодзи" value="👤" maxlength="2">
-        <button type="button" class="remove-master">❌</button>
-    `;
-    container.appendChild(newMaster);
-});
+<template id="service-template">
+    <div class="array-item service-item">
+        <button type="button" class="remove-item">❌ Удалить</button>
+        <div class="form-group">
+            <label>Название услуги</label>
+            <input type="text" name="service_name[]" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Цена</label>
+            <input type="text" name="service_price[]" class="form-control" placeholder="1500">
+        </div>
+        <div class="form-group">
+            <label>Длительность (минут)</label>
+            <input type="number" name="service_duration[]" class="form-control" value="60">
+        </div>
+        <div class="form-group">
+            <label>Описание</label>
+            <input type="text" name="service_desc[]" class="form-control" placeholder="Описание услуги">
+        </div>
+    </div>
+</template>
+{% endblock %}
 
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('remove-master')) {
-        e.target.parentElement.remove();
-    }
-});
-</script>
-
-<style>
-.master-item {
-    display: flex;
-    gap: 5px;
-    margin: 5px 0;
-}
-.master-item input {
-    flex: 1;
-}
-</style>
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/create.js') }}"></script>
 {% endblock %}

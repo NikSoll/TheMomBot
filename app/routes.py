@@ -19,8 +19,8 @@ def index():
     return render_template('index.html', templates=templates)
 
 
-@main_bp.route('/choose-template')
-def choose_template():
+@main_bp.route('/choose-template/<platform>')
+def choose_template(platform):
     templates = [
         {'code': 'make', 'name': 'Запись на услуги', 'desc': 'Для салонов красоты'},
         {'code': 'shop', 'name': 'Интернет-магазин', 'desc': 'Продажа товаров'},
@@ -28,15 +28,24 @@ def choose_template():
         {'code': 'survey', 'name': 'Опросник', 'desc': 'Сбор обратной связи'},
         {'code': 'mailer', 'name': 'Рассыльщик', 'desc': 'Рассылка новостей'},
     ]
-    return render_template('choose_template.html', templates=templates)
+    return render_template('choose_template.html', platform=platform, templates=templates)
+
+
+@main_bp.route('/choose-platform')
+def choose_platform():
+    return render_template('choose_platform.html')
 
 
 @main_bp.route('/create/<platform>/<bot_type>')
 def create_bot_form(platform, bot_type):
+    if not platform or not bot_type:
+        flash('Ошибка: не указана платформа или тип бота', 'danger')
+        return redirect(url_for('main.choose_platform'))
     try:
         return render_template(f'create/{platform}/{bot_type}.html')
     except:
-        return render_template(f'create/{platform}/base.html', bot_type=bot_type)
+        flash(f'Шаблон create/{platform}/{bot_type}.html не найден', 'danger')
+        return redirect(url_for('main.choose_template', platform=platform))
 
 
 @main_bp.route('/create', methods=['GET','POST'])
@@ -88,7 +97,32 @@ def create_bot():
         vk_token = request.form.get('vk_token')
         group_id = request.form.get('group_id')
         admin_id = request.form.get('admin_id', '6496349641')
-        #потом добавить
+
+        #собираем мастеров
+        masters = []
+        names = request.form.getlist('master_name[]')
+        emojis = request.form.getlist('master_emoji[]')
+
+        for i, name in enumerate(names):
+            if name.strip():
+                masters.append({
+                    'id': i + 1,
+                    'name': name,
+                    'emoji': emojis[i] if i < len(emojis) else '👤'
+                })
+
+        #каты и товары
+        categories = request.form.get('categories', '').split('\n')
+        products = request.form.get('products', '').split('\n')
+
+        #для замены
+        if bot_type == 'shop':
+            # формируем список категорий
+            cats_list = []
+            for i, cat in enumerate(categories):
+                if cat.strip():
+                    cats_list.append({'id': i + 1, 'name': cat.strip()})
+            #позже добавить в replacements не забыть
 
     #макс
     elif platform == 'max':

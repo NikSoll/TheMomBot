@@ -1,0 +1,156 @@
+{% extends "create/vk/base.html" %}
+
+{% block bot_type %}survey{% endblock %}
+{% block form_title %}📋 VK Опросник{% endblock %}
+
+{% block extra_fields %}
+<div class="form-group">
+    <label>Название опроса:</label>
+    <input type="text" name="survey_name" class="form-control" value="Обратная связь">
+</div>
+
+<div class="form-group">
+    <label>Описание:</label>
+    <textarea name="survey_desc" class="form-control" rows="2">Помогите нам стать лучше!</textarea>
+</div>
+
+<div class="form-group">
+    <label>Анонимные ответы:</label>
+    <select name="anonymous" class="form-control">
+        <option value="true">Да</option>
+        <option value="false">Нет</option>
+    </select>{% extends "create/vk/base.html" %}
+
+{% block bot_type %}survey{% endblock %}
+{% block form_title %}📋 VK Опросник (полная версия){% endblock %}
+
+{% block extra_fields %}
+<div class="settings-section">
+    <h3>🔧 Основные настройки</h3>
+
+    <div class="form-group">
+        <label>Название опроса</label>
+        <input type="text" name="survey_name" class="form-control" value="Обратная связь">
+    </div>
+
+    <div class="form-group">
+        <label>Описание опроса</label>
+        <textarea name="survey_desc" class="form-control" rows="3">Помогите нам стать лучше!</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Анонимные ответы</label>
+        <select name="anonymous" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Разрешить пропускать вопросы</label>
+        <select name="allow_skip" class="form-control">
+            <option value="false">Нет</option>
+            <option value="true">Да</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Показывать прогресс</label>
+        <select name="show_progress" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+</div>
+
+<div class="settings-section">
+    <h3>❓ Вопросы</h3>
+    <div id="questions-container"></div>
+    <button type="button" class="add-btn" id="add-question">➕ Добавить вопрос</button>
+</div>
+
+<div class="settings-section">
+    <h3>💬 Сообщения</h3>
+
+    <div class="form-group">
+        <label>Приветственное сообщение</label>
+        <textarea name="welcome_message" class="form-control" rows="2">📋 Здравствуйте! Пожалуйста, ответьте на несколько вопросов.</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Сообщение после опроса</label>
+        <textarea name="thanks_message" class="form-control" rows="2">🙏 Спасибо за участие в опросе!</textarea>
+    </div>
+</div>
+
+<!--шаблоны-->
+<template id="question-template">
+    <div class="array-item question-item">
+        <button type="button" class="remove-item">❌</button>
+
+        <div class="form-group">
+            <label>Текст вопроса</label>
+            <input type="text" name="question_text[]" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>Тип вопроса</label>
+            <select name="question_type[]" class="form-control">
+                <option value="text">📝 Текстовый ответ</option>
+                <option value="single">🔘 Один вариант</option>
+                <option value="multiple">✅ Несколько вариантов</option>
+                <option value="scale">📊 Оценка по шкале</option>
+                <option value="number">🔢 Числовой ответ</option>
+                <option value="date">📅 Дата</option>
+                <option value="phone">📞 Телефон</option>
+                <option value="email">📧 Email</option>
+            </select>
+        </div>
+
+        <div class="form-group options-field" style="display: none;">
+            <label>Варианты ответов (каждый с новой строки)</label>
+            <textarea name="question_options[]" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="form-group scale-fields" style="display: none;">
+            <div class="two-columns">
+                <div class="form-group">
+                    <label>Мин. значение</label>
+                    <input type="number" name="scale_min[]" class="form-control" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Макс. значение</label>
+                    <input type="number" name="scale_max[]" class="form-control" value="5">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Подписи для значений (через запятую)</label>
+                <input type="text" name="scale_labels[]" class="form-control" placeholder="Плохо,Средне,Хорошо,Отлично">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Обязательный вопрос</label>
+            <select name="question_required[]" class="form-control">
+                <option value="true">Да</option>
+                <option value="false">Нет</option>
+            </select>
+        </div>
+    </div>
+</template>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/vk.js') }}"></script>
+{% endblock %}
+</div>
+
+<div class="form-group">
+    <label>Типы вопросов (по одному на строку):</label>
+    <textarea name="question_types" class="form-control" rows="4">text
+single
+multiple
+scale</textarea>
+    <small>Доступно: text, single, multiple, scale</small>
+</div>
+{% endblock %}
