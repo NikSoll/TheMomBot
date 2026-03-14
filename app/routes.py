@@ -128,7 +128,128 @@ def create_bot():
     elif platform == 'max':
         max_key = request.form.get('max_key')
         bot_id = request.form.get('bot_id')
-        # потом добавить
+        admin_id = request.form.get('admin_id', '6496349641')
+        webhook_url = request.form.get('webhook_url', '')
+        secret_key = request.form.get('secret_key', '')
+
+        #общ логика
+        bot_token = max_key
+
+        #make
+        masters = []
+        names = request.form.getlist('master_name[]')
+        emojis = request.form.getlist('master_emoji[]')
+        descs = request.form.getlist('master_desc[]')
+        specialties = request.form.getlist('master_specialty[]')
+
+        for i, name in enumerate(names):
+            if name.strip():
+                masters.append({
+                    'id': i + 1,
+                    'name': name,
+                    'emoji': emojis[i] if i < len(emojis) else '👤',
+                    'desc': descs[i] if i < len(descs) else '',
+                    'specialty': specialties[i] if i < len(specialties) else ''
+                })
+
+        #услуги
+        services = []
+        service_names = request.form.getlist('service_name[]')
+        service_prices = request.form.getlist('service_price[]')
+        service_durations = request.form.getlist('service_duration[]')
+        service_descs = request.form.getlist('service_desc[]')
+
+        for i, name in enumerate(service_names):
+            if name.strip():
+                services.append({
+                    'id': i + 1,
+                    'name': name,
+                    'price': service_prices[i] if i < len(service_prices) else 0,
+                    'duration': service_durations[i] if i < len(service_durations) else 60,
+                    'desc': service_descs[i] if i < len(service_descs) else ''
+                })
+
+        #shop
+        categories = []
+        cat_names = request.form.getlist('category_name[]')
+        cat_emojis = request.form.getlist('category_emoji[]')
+
+        for i, name in enumerate(cat_names):
+            if name.strip():
+                categories.append({
+                    'id': i + 1,
+                    'name': name,
+                    'emoji': cat_emojis[i] if i < len(cat_emojis) else '📦'
+                })
+
+        #товары
+        products = []
+        prod_names = request.form.getlist('product_name[]')
+        prod_prices = request.form.getlist('product_price[]')
+        prod_cats = request.form.getlist('product_category[]')
+        prod_descs = request.form.getlist('product_desc[]')
+        prod_photos = request.form.getlist('product_photo[]')
+
+        for i, name in enumerate(prod_names):
+            if name.strip():
+                products.append({
+                    'id': i + 1,
+                    'name': name,
+                    'price': prod_prices[i] if i < len(prod_prices) else 0,
+                    'category_id': prod_cats[i] if i < len(prod_cats) else 1,
+                    'desc': prod_descs[i] if i < len(prod_descs) else '',
+                    'photo': prod_photos[i] if i < len(prod_photos) else None
+                })
+
+        #quiz/survey
+        questions = []
+        q_texts = request.form.getlist('question_text[]')
+        q_types = request.form.getlist('question_type[]')
+        q_options = request.form.getlist('question_options[]')
+        q_points = request.form.getlist('question_points[]')
+
+        for i, text in enumerate(q_texts):
+            if text.strip():
+                questions.append({
+                    'id': i + 1,
+                    'text': text,
+                    'type': q_types[i] if i < len(q_types) else 'text',
+                    'options': q_options[i].split('\n') if i < len(q_options) else [],
+                    'points': q_points[i] if i < len(q_points) else ''
+                })
+
+        #резы
+        results = []
+        r_types = request.form.getlist('result_type[]')
+        r_texts = request.form.getlist('result_text[]')
+
+        for i, r_type in enumerate(r_types):
+            if r_type.strip():
+                results.append({
+                    'type': r_type,
+                    'text': r_texts[i] if i < len(r_texts) else ''
+                })
+
+        #группы mailer
+        groups = []
+        group_names = request.form.getlist('group_name[]')
+
+        for i, name in enumerate(group_names):
+            if name.strip():
+                groups.append({
+                    'id': i + 1,
+                    'name': name
+                })
+
+        #доп поля
+        shop_name = request.form.get('shop_name', 'Мой магазин')
+        address = request.form.get('address', '')
+        phone = request.form.get('phone', '')
+        available_times = request.form.get('available_times', '10:00\n11:00\n12:00').split('\n')
+        booking_days = request.form.get('booking_days', 7)
+
+        #сейв данных в БД или в config
+        print(f"MAX бот: {bot_name}, тип: {bot_type}")
 
     #пока так потом как-нибудь поправлю
     user = User.query.first()

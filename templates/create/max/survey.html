@@ -1,0 +1,46 @@
+{% extends "create/max/base.html" %}
+
+{% block bot_type %}survey{% endblock %}
+{% block form_title %}📋 Max Опросник (полная версия){% endblock %}
+
+{% block extra_fields %}
+<!--бааазаааа-->
+<div class="settings-section">
+    <h3>🔧 Основные настройки</h3>
+    
+    <div class="form-group">
+        <label>Название опроса</label>
+        <input type="text" name="survey_name" class="form-control" value="Обратная связь">
+    </div>
+    
+    <div class="form-group">
+        <label>Анонимные ответы</label>
+        <select name="anonymous" class="form-control">
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+    </div>
+</div>
+
+<!--вопросы-->
+<div class="settings-section">
+    <h3>❓ Вопросы</h3>
+    <div id="questions-container"></div>
+    <button type="button" class="add-btn" id="add-question">➕ Добавить вопрос</button>
+</div>
+
+<!--шаблоны-->
+<template id="question-template">
+    <div class="array-item question-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="question_text[]" placeholder="Текст вопроса" required>
+        <select name="question_type[]">
+            <option value="text">Текст</option>
+            <option value="single">Один вариант</option>
+            <option value="multiple">Несколько</option>
+            <option value="scale">Оценка</option>
+        </select>
+        <textarea name="question_options[]" placeholder="Варианты (для single/multiple)"></textarea>
+    </div>
+</template>
+{% endblock %}

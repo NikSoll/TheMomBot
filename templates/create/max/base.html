@@ -1,15 +1,74 @@
-{% extends "create/base_create.html" %}
+{% extends "base.html" %}
 
-{% block platform %}max{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/max.css') }}">
+{% endblock %}
 
-{% block platform_fields %}
-<div class="form-group">
-    <label>API ключ Max:</label>
-    <input type="text" name="max_key" class="form-control" required>
+{% block content %}
+<div class="create-container">
+    <h2>{% block form_title %}Создание Max бота{% endblock %}</h2>
+
+    <form method="POST" action="{{ url_for('main.create_bot') }}">
+        <input type="hidden" name="platform" value="max">
+        <input type="hidden" name="bot_type" value="{% block bot_type %}{% endblock %}">
+
+        <!--это бааазааа-->
+        <div class="settings-section">
+            <h3>🔧 Основные настройки Max</h3>
+
+            <div class="form-group">
+                <label>API ключ Max *</label>
+                <input type="text" name="max_key" class="form-control" required
+                       placeholder="max_api_key_123456">
+                <small>Получите в кабинете разработчика Max</small>
+            </div>
+
+            <div class="form-group">
+                <label>ID бота *</label>
+                <input type="text" name="bot_id" class="form-control" required
+                       placeholder="123456">
+            </div>
+
+            <div class="form-group">
+                <label>Название бота *</label>
+                <input type="text" name="bot_name" class="form-control" required
+                       value="Мой Max бот">
+            </div>
+
+            <div class="form-group">
+                <label>Admin ID</label>
+                <input type="text" name="admin_id" class="form-control" value="6496349641">
+                <small>ID администратора для уведомлений</small>
+            </div>
+        </div>
+
+        <!--спец для макс-->
+        <div class="settings-section">
+            <h3>📱 Настройки Max</h3>
+
+            <div class="form-group">
+                <label>Webhook URL</label>
+                <input type="url" name="webhook_url" class="form-control"
+                       value="https://your-domain.com/webhook">
+                <small>URL для получения обновлений</small>
+            </div>
+
+            <div class="form-group">
+                <label>Секретный ключ</label>
+                <input type="text" name="secret_key" class="form-control"
+                       value="your_secret_key">
+            </div>
+        </div>
+
+        <!--доп поля-->
+        {% block extra_fields %}{% endblock %}
+
+        <button type="submit" class="btn btn-success btn-lg">✨ Создать Max бота</button>
+    </form>
 </div>
+{% endblock %}
 
-<div class="form-group">
-    <label>ID бота:</label>
-    <input type="text" name="bot_id" class="form-control" required>
-</div>
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/max.js') }}"></script>
 {% endblock %}

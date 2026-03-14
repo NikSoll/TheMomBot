@@ -1,0 +1,53 @@
+{% extends "create/max/base.html" %}
+
+{% block bot_type %}quiz{% endblock %}
+{% block form_title %}🎯 Max Квиз-бот (полная версия){% endblock %}
+
+{% block extra_fields %}
+<!--базааа-->
+<div class="settings-section">
+    <h3>🔧 Основные настройки</h3>
+    
+    <div class="form-group">
+        <label>Название квиза</label>
+        <input type="text" name="quiz_name" class="form-control" value="Тест: Какая ты звезда?">
+    </div>
+    
+    <div class="form-group">
+        <label>Описание квиза</label>
+        <textarea name="quiz_desc" class="form-control" rows="3">Пройди тест и узнай результат!</textarea>
+    </div>
+</div>
+
+<!--вопросы-->
+<div class="settings-section">
+    <h3>❓ Вопросы</h3>
+    <div id="questions-container"></div>
+    <button type="button" class="add-btn" id="add-question">➕ Добавить вопрос</button>
+</div>
+
+<!-- резы-->
+<div class="settings-section">
+    <h3>🏆 Результаты</h3>
+    <div id="results-container"></div>
+    <button type="button" class="add-btn" id="add-result">➕ Добавить результат</button>
+</div>
+
+<!--шаблоны-->
+<template id="question-template">
+    <div class="array-item question-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="question_text[]" placeholder="Текст вопроса" required>
+        <textarea name="question_options[]" placeholder="Варианты ответов (каждый с новой строки)" rows="4"></textarea>
+        <input type="text" name="question_points[]" placeholder="Баллы (через запятую)">
+    </div>
+</template>
+
+<template id="result-template">
+    <div class="array-item result-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="result_type[]" placeholder="Тип результата" required>
+        <textarea name="result_text[]" placeholder="Текст результата" rows="3" required></textarea>
+    </div>
+</template>
+{% endblock %}

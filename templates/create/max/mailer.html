@@ -1,0 +1,36 @@
+{% extends "create/max/base.html" %}
+
+{% block bot_type %}mailer{% endblock %}
+{% block form_title %}📢 Max Рассыльщик (полная версия){% endblock %}
+
+{% block extra_fields %}
+<!--баааазааа-->
+<div class="settings-section">
+    <h3>🔧 Основные настройки</h3>
+    
+    <div class="form-group">
+        <label>Название рассылки</label>
+        <input type="text" name="mailer_name" class="form-control" value="Новостная рассылка">
+    </div>
+    
+    <div class="form-group">
+        <label>Приветственное сообщение</label>
+        <textarea name="welcome_message" class="form-control" rows="3">👋 Добро пожаловать!</textarea>
+    </div>
+</div>
+
+<!--группы-->
+<div class="settings-section">
+    <h3>👥 Группы подписчиков</h3>
+    <div id="groups-container"></div>
+    <button type="button" class="add-btn" id="add-group">➕ Добавить группу</button>
+</div>
+
+<!--шаблоны-->
+<template id="group-template">
+    <div class="array-item group-item">
+        <button type="button" class="remove-item">❌</button>
+        <input type="text" name="group_name[]" placeholder="Название группы" required>
+    </div>
+</template>
+{% endblock %}
